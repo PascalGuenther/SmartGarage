@@ -5,6 +5,7 @@
 #include "bsp-config.h"
 #include <WiFiManager.h>
 #include <fauxmoESP.h>
+#include "Garage.h"
 
 #if !defined(NDEBUG)
   #define DEBUG_PRINT(...) Serial.print(__VA_ARGS__)
@@ -20,6 +21,7 @@
 // ------- Static Variables -------
 DoubleResetDetector oDrd(DRD_CFG_TIMEOUT_SECONDS, DRD_CFG_TIMEOUT_ADDRESS);
 fauxmoESP oFauxmo;
+SmartGarage::Garage oGarage(ucGarageActuatorPin);
 
 static void fauxmoSetup(void)
 {
@@ -34,6 +36,7 @@ static void fauxmoSetup(void)
     if (0u == strncmp(aucDeviceName, WEMO_DEVICE_NAME_GARAGE, sizeof(WEMO_DEVICE_NAME_GARAGE)))
     {
       DEBUG_PRINTLN(bState ? "Wemo Garage ON": "Wemo Garage OFF");
+      oGarage.Move();
     }
   });
 }
