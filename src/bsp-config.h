@@ -1,2 +1,4 @@
 #pragma once
-#include <stdint.h>
+#include <cinttypes>
+
+const uint8_t ucGarageActuatorPin = 0u;
