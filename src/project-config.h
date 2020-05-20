@@ -33,3 +33,5 @@
 
 // Double reset detector: Address
 #define DRD_CFG_TIMEOUT_ADDRESS       (0u)
+
+#define WEMO_DEVICE_NAME_GARAGE "Garage"
