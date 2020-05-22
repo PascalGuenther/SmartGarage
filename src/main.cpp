@@ -21,7 +21,7 @@
 // ------- Static Variables -------
 DoubleResetDetector oDrd(DRD_CFG_TIMEOUT_SECONDS, DRD_CFG_TIMEOUT_ADDRESS);
 fauxmoESP oFauxmo;
-SmartGarage::Garage oGarage(ucGarageActuatorPin);
+SmartGarage::Garage oGarage(ucGarageActuatorPin, true);
 
 static void fauxmoSetup(void)
 {

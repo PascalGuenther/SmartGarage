@@ -11,20 +11,22 @@ namespace SmartGarage {
     class GARAGE_API Garage
     {
     public:
-        Garage(uint8_t ucActuatorPin)
-            : m_ucActuatorPin(ucActuatorPin)
+        Garage(uint8_t ucActuatorPin, bool bActiveLow = false)
+            : m_ucActuatorPin(ucActuatorPin), m_bActiveLow(bActiveLow)
         {
             pinMode(m_ucActuatorPin, OUTPUT);
-            digitalWrite(m_ucActuatorPin, LOW);
+            digitalWrite(m_ucActuatorPin, m_bActiveLow ? HIGH : LOW);
         }
         void Move()
         {
-            digitalWrite(m_ucActuatorPin, HIGH);
-            delay(500);
-            digitalWrite(m_ucActuatorPin, LOW);
+            unsigned long ulStart = millis();
+            digitalWrite(m_ucActuatorPin, m_bActiveLow ? LOW : HIGH);
+            while(millis() < (ulStart + 750u)) {}
+            digitalWrite(m_ucActuatorPin, m_bActiveLow ? HIGH : LOW);
         }
     private:
         uint8_t m_ucActuatorPin;
+        uint8_t m_bActiveLow;
     };
 
 }
