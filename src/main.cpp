@@ -1,3 +1,16 @@
+/**
+ * @file main.cpp
+ * @author Pascal Guenther (pascal.develop@pguenther.net)
+ * @brief Garage door opener for Amazon Alexa
+ * @version 1.0
+ * @date 2020-05-22
+ * 
+ * @copyright Copyright (c) 2020 Pascal Guenther
+ * 
+ * Control your garage door with Amazon Alexa using the ESP8266 WiFi microcontroller.
+ * See README.md for instructions.
+ * 
+ */
 #include <Arduino.h>
 #include <ESP8266WiFi.h> 
 #include <DoubleResetDetector.h>

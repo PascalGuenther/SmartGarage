@@ -1,3 +1,13 @@
+/**
+ * @file project-config.h
+ * @author Pascal Guenther (pascal.develop@pguenther.net)
+ * @brief Global project configuration
+ * @version 1.0
+ * @date 2020-05-22
+ * 
+ * @copyright Copyright (c) 2020 Pascal Guenther
+ * 
+ */
 #pragma once
 #include "Arduino.h"
 

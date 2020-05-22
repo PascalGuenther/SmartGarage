@@ -1,3 +1,13 @@
+/**
+ * @file Garage.h
+ * @author Pascal Guenther (pascal.develop@pguenther.net)
+ * @brief Garage Door controller
+ * @version 0.1
+ * @date 2020-05-22
+ * 
+ * @copyright Copyright (c) 2020 Pascal Guenther
+ * 
+ */
 #pragma once
 #include <cinttypes>
 #include <Arduino.h>
