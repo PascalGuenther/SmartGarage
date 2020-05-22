@@ -8,10 +8,10 @@
 
 namespace SmartGarage {
 
-    class GARAGE_API Garage
+    class GARAGE_API GarageDoor
     {
     public:
-        Garage(uint8_t ucActuatorPin, bool bActiveLow = false)
+        GarageDoor(uint8_t ucActuatorPin, bool bActiveLow = false)
             : m_ucActuatorPin(ucActuatorPin), m_bActiveLow(bActiveLow)
         {
             pinMode(m_ucActuatorPin, OUTPUT);
