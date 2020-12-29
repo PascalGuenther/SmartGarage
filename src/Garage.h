@@ -18,25 +18,31 @@
 
 namespace SmartGarage {
 
+    enum class Polarity
+    {
+        activeLow, activeHigh,
+    };
+
     class GARAGE_API GarageDoor
     {
     public:
-        GarageDoor(uint8_t ucActuatorPin, bool bActiveLow = false)
-            : m_ucActuatorPin(ucActuatorPin), m_bActiveLow(bActiveLow)
+        GarageDoor(uint8_t ucActuatorPin, Polarity ePolarity = Polarity::activeLow)
+            : m_ucActuatorPin(ucActuatorPin), m_ePolarity(ePolarity)
         {
             pinMode(m_ucActuatorPin, OUTPUT);
-            digitalWrite(m_ucActuatorPin, m_bActiveLow ? HIGH : LOW);
+            digitalWrite(m_ucActuatorPin, (m_ePolarity == Polarity::activeLow) ? HIGH : LOW);
         }
+
         void Move()
         {
             unsigned long ulStart = millis();
-            digitalWrite(m_ucActuatorPin, m_bActiveLow ? LOW : HIGH);
+            digitalWrite(m_ucActuatorPin, (m_ePolarity == Polarity::activeLow) ? LOW : HIGH);
             while(millis() < (ulStart + 750u)) {}
-            digitalWrite(m_ucActuatorPin, m_bActiveLow ? HIGH : LOW);
+            digitalWrite(m_ucActuatorPin, (m_ePolarity == Polarity::activeLow) ? HIGH : LOW);
         }
     private:
-        uint8_t m_ucActuatorPin;
-        uint8_t m_bActiveLow;
+        const uint8_t m_ucActuatorPin;
+        const Polarity m_ePolarity;
     };
 
 }
