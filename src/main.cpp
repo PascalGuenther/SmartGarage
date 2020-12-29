@@ -11,13 +11,16 @@
  * See README.md for instructions.
  * 
  */
+
+#if !defined(NDEBUG)
+#include <DoubleResetDetector.h>
+#endif
 #include <Arduino.h>
 #include <ESP8266WiFi.h> 
-#include <DoubleResetDetector.h>
-#include "project-config.h"
-#include "bsp-config.h"
 #include <WiFiManager.h>
 #include <fauxmoESP.h>
+#include "project-config.h"
+#include "bsp-config.h"
 #include "Garage.h"
 
 #if !defined(NDEBUG)
@@ -32,7 +35,9 @@
 
 
 // ------- Static Variables -------
+#if !defined(NDEBUG)
 DoubleResetDetector oDrd(DRD_CFG_TIMEOUT_SECONDS, DRD_CFG_TIMEOUT_ADDRESS);
+#endif
 fauxmoESP oFauxmo;
 SmartGarage::GarageDoor oGarage(ucGarageActuatorPin, SmartGarage::Polarity::activeLow);
 
@@ -70,6 +75,8 @@ void setup()
   // Start a configuration portal, if not network config is present.
   // Otherwise, try to connect to the WiFi network
   bool bWiFiConnected;
+// ------- Static Variables -------
+#if !defined(NDEBUG)
   if(oDrd.detectDoubleReset())
   {
     // device has been double-reset in a short amount of time
@@ -77,9 +84,12 @@ void setup()
     bWiFiConnected = wifiManager.startConfigPortal(WIFI_CFG_ACCESS_POINT_SSID, WIFI_CFG_ACCESS_POINT_PASSWORD);
   } else
   {
+#endif
     bWiFiConnected = wifiManager.autoConnect(WIFI_CFG_ACCESS_POINT_SSID, WIFI_CFG_ACCESS_POINT_PASSWORD);
+#if !defined(NDEBUG)
   }
   oDrd.stop();
+#endif
 
   if (!bWiFiConnected)
   {
