@@ -11,4 +11,10 @@
 #pragma once
 #include <cinttypes>
 
-const uint8_t ucGarageActuatorPin = 0u;
+#if defined(ESP01)
+    constexpr std::uint8_t ucGarageActuatorPin{14u};
+#elif defined(NODEMCUV2)
+    constexpr std::uint8_t ucGarageActuatorPin{16u};
+#else
+    #error Please define board
+#endif
