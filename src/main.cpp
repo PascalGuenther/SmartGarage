@@ -98,6 +98,11 @@ void setup()
     ESP.reset();
     delay(5000);
   }
+  WiFi.onStationModeDisconnected([] (const WiFiEventStationModeDisconnected& /* event */) {
+    Serial.println("WiFi disconnected. Resetting device...");
+    delay(3000);
+    ESP.reset();
+  });
 
   Serial.println("Connected to WiFi \"" + WiFi.SSID() + "\", IP " + WiFi.localIP().toString());
   fauxmoSetup();
