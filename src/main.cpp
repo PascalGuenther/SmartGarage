@@ -43,9 +43,7 @@ SmartGarage::GarageDoor oGarage(ucGarageActuatorPin, SmartGarage::Polarity::acti
 
 static void fauxmoSetup(void)
 {
-  oFauxmo.createServer(true);
   oFauxmo.setPort(80);
-  oFauxmo.enable(true);
 
   oFauxmo.addDevice(WEMO_DEVICE_NAME_GARAGE);
   oFauxmo.onSetState([](unsigned char ucDeviceId, const char * aucDeviceName, bool bState, unsigned char ucValue)
@@ -57,6 +55,7 @@ static void fauxmoSetup(void)
       oGarage.Move();
     }
   });
+  oFauxmo.enable(true);
 }
 
 void setup()
