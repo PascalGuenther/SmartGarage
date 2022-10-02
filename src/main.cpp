@@ -13,6 +13,7 @@
  */
 
 #include <Arduino.h>
+#include <ArduinoOTA.h>
 #if defined(ARDUINO_ARCH_ESP32)
 #include <WiFi.h>
 #elif defined(ARDUINO_ARCH_ESP8266)
@@ -100,6 +101,7 @@ void setup()
   fauxmoSetup();
 
   Serial.printf("Leaving setup...");
+  ArduinoOTA.begin();
 
 }
 
@@ -109,6 +111,7 @@ static unsigned long lastMillis;
 
 void loop()
 {
+  ArduinoOTA.handle();
 #if 0
   const auto newMillis = millis();
   static_assert(std::is_same<std::decay<decltype(lastMillis)>::type, std::decay<decltype(newMillis)>::type>::value, "");
