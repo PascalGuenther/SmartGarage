@@ -1,8 +1,8 @@
 # SmartGarage - Alexa Garage Door Drive Remote
 The SmartGarage software allows you to control your garage door with Amazon Alexa-powered devices like the Amazon Echo.
-This project is based on the very inexpensive ESP8266 microcontroller and the [PlatformIO](https://platformio.org) IDE.
+This project is based on the very inexpensive ESP8266 or ESP32 microcontroller and the [PlatformIO](https://platformio.org) IDE.
 ## Usage
-This project should run on all ESP8266 boards which are available from various
+This project should run on all ESP8266 or ESP32 boards which are available from various
 manufacturers. By default, the software is configured to use the ESP-01 board
 and Pin 0. If you prefer to use a different board (like NodeMCU), please edit
 the files platform.ino and bsp-config.h.

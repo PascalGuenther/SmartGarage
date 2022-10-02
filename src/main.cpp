@@ -12,11 +12,14 @@
  * 
  */
 
-#if !defined(NDEBUG)
-#include <DoubleResetDetector.h>
-#endif
 #include <Arduino.h>
-#include <ESP8266WiFi.h> 
+#if defined(ARDUINO_ARCH_ESP32)
+#include <WiFi.h>
+#elif defined(ARDUINO_ARCH_ESP8266)
+#include <ESP8266WiFi.h>
+#else
+#error "platform not supported"
+#endif
 #include <WiFiManager.h>
 #include <fauxmoESP.h>
 #include "project-config.h"
@@ -35,9 +38,7 @@
 
 
 // ------- Static Variables -------
-#if !defined(NDEBUG)
-DoubleResetDetector oDrd(DRD_CFG_TIMEOUT_SECONDS, DRD_CFG_TIMEOUT_ADDRESS);
-#endif
+
 fauxmoESP oFauxmo;
 SmartGarage::GarageDoor oGarage(ucGarageActuatorPin, SmartGarage::Polarity::activeLow);
 
@@ -71,38 +72,29 @@ void setup()
   // WiFi Manager will be freed after configuration has finished
   WiFiManager wifiManager;
 
-  // Start a configuration portal, if not network config is present.
-  // Otherwise, try to connect to the WiFi network
-  bool bWiFiConnected;
-// ------- Static Variables -------
-#if !defined(NDEBUG)
-  if(oDrd.detectDoubleReset())
+  wifiManager.setTimeout(40);
+  bool bWiFiConnected = wifiManager.startConfigPortal(WIFI_CFG_ACCESS_POINT_SSID, WIFI_CFG_ACCESS_POINT_PASSWORD);
+  if(!bWiFiConnected)
   {
-    // device has been double-reset in a short amount of time
-    Serial.println("Config mode after reset");
-    bWiFiConnected = wifiManager.startConfigPortal(WIFI_CFG_ACCESS_POINT_SSID, WIFI_CFG_ACCESS_POINT_PASSWORD);
-  } else
-  {
-#endif
+    wifiManager.setTimeout(0);
     bWiFiConnected = wifiManager.autoConnect(WIFI_CFG_ACCESS_POINT_SSID, WIFI_CFG_ACCESS_POINT_PASSWORD);
-#if !defined(NDEBUG)
   }
-  oDrd.stop();
-#endif
 
   if (!bWiFiConnected)
   {
     // failed to connect to an AP
     Serial.println("failed to connect and hit timeout");
     delay(3000);
-    ESP.reset();
+    ESP.restart();
     delay(5000);
   }
+#if defined(ARDUINO_ARCH_ESP8266)
   WiFi.onStationModeDisconnected([] (const WiFiEventStationModeDisconnected& /* event */) {
     Serial.println("WiFi disconnected. Resetting device...");
-    delay(3000);
+    delay(30000);
     ESP.reset();
   });
+#endif // defined(ARDUINO_ARCH_ESP8266)
 
   Serial.println("Connected to WiFi \"" + WiFi.SSID() + "\", IP " + WiFi.localIP().toString());
   fauxmoSetup();
@@ -111,7 +103,26 @@ void setup()
 
 }
 
+#if 0
+static unsigned long lastMillis;
+#endif
+
 void loop()
 {
+#if 0
+  const auto newMillis = millis();
+  static_assert(std::is_same<std::decay<decltype(lastMillis)>::type, std::decay<decltype(newMillis)>::type>::value, "");
+  const auto deltaTime = (newMillis >= lastMillis) ? (newMillis - lastMillis) : (lastMillis - newMillis);
+  if(deltaTime > 30000ul)
+  {
+    lastMillis = newMillis;
+    if(WiFi.status() != WL_CONNECTED)
+    {
+      WiFi.disconnect();
+      WiFi.reconnect();
+    }
+  }
+#endif
+
   oFauxmo.handle();
 }

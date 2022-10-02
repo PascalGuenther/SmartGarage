@@ -15,6 +15,8 @@
     constexpr std::uint8_t ucGarageActuatorPin{14u};
 #elif defined(NODEMCUV2)
     constexpr std::uint8_t ucGarageActuatorPin{16u};
+#elif defined(ESP32_DEVKITC_V4)
+    constexpr std::uint8_t ucGarageActuatorPin{12u};
 #else
     #error Please define board
 #endif
